@@ -3,10 +3,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { client } from "@/lib/hono"
 import { toast } from "sonner";
 
-type ResponseType = InferResponseType<typeof client.api.accounts[":id"]["$patch"]>
-type RequestType = InferRequestType<typeof client.api.accounts[":id"]["$patch"]>["json"]
+type ResponseType = InferResponseType<typeof client.api.categories[":id"]["$patch"]>
+type RequestType = InferRequestType<typeof client.api.categories[":id"]["$patch"]>["json"]
 
-export function useEditAccount(id?: string) {
+export function useEditCategory(id?: string) {
 	const queryClient = useQueryClient()
 
 	const mutation = useMutation<
@@ -15,20 +15,20 @@ export function useEditAccount(id?: string) {
 		RequestType
 	>({
 		mutationFn: async (json) => {
-			const response = await client.api.accounts[":id"]["$patch"]({
+			const response = await client.api.categories[":id"]["$patch"]({
 				param: { id },
 				json,
 			})
 			return await response.json()
 		},
 		onSuccess: () => {
-			toast.success("Account updated")
-			queryClient.invalidateQueries({ queryKey: ["account", { id }] })
-			queryClient.invalidateQueries({ queryKey: ["accounts"] })
+			toast.success("Category updated")
+			queryClient.invalidateQueries({ queryKey: ["category", { id }] })
+			queryClient.invalidateQueries({ queryKey: ["categories"] })
 			queryClient.invalidateQueries({ queryKey: ["transactions"] })
 		},
 		onError: () => {
-			toast.error("Failed to edit account")
+			toast.error("Failed to edit category")
 		}
 	})
 
